@@ -18,12 +18,12 @@ type CosiSignature struct {
 
 func CosiCommit(randReader io.Reader) *Key {
 	var messageDigest [64]byte
-	n, err := randReader.Read(messageDigest[:])
-	if err != nil {
-		panic(err)
-	}
-	if n != len(messageDigest) {
-		panic(fmt.Errorf("rand read %d %d", len(messageDigest), n))
+	for i:=0;i<64; {
+		n, err := randReader.Read(messageDigest[i:])
+		if err != nil {
+			panic(err)
+		}
+		i += n
 	}
 	r := NewKeyFromSeed(messageDigest[:])
 	return &r
